@@ -33,7 +33,7 @@ def obter_ocorrencias(entries):
 def ordenar_ocorrencias(ocorrencias):
     return sorted(ocorrencias.items(), key=lambda item: item[1], reverse=True)
 
-def listarOcorrencias_de_dominios(ocorrencias, limite=-1):
+def listar_ocorrencias_de_dominios(ocorrencias, limite=-1):
     header = ["Domínio", "Ocorrências"]
     table = tabulate.tabulate(ocorrencias[:limite], headers=header, tablefmt="grid")
     print(f"Foram encontradas ocorrencias em {len(ocorrencias)} domínios")
@@ -44,4 +44,4 @@ print(head)
 
 ocorrencias = obter_ocorrencias(entries)
 ocorrencias = ordenar_ocorrencias(ocorrencias)
-listarOcorrencias_de_dominios(ocorrencias)
+listar_ocorrencias_de_dominios(ocorrencias)
