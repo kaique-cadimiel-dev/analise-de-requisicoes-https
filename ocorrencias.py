@@ -5,11 +5,6 @@ from simple_term_menu import TerminalMenu
 import re
 import tabulate
 
-logs = ler_arquivo('net.har')
-head = montar_head(logs["log"]["pages"], logs["log"]["entries"])
-
-entries = logs["log"]["entries"]
-
 pattern = r"https:\/\/([^\/]+)\/"
 
 def obter_ocorrencias(entries):
@@ -49,9 +44,21 @@ Analise de requisições http
 Obtenha seu arquivo "net.har" em "https://speedvitals.com"
 e adicione na raiz. Para mais instruções leia o README.md
           
-Para comecar escolha uma opcao:
+Para comecar digite o nome do arquivo .har:
 
 """)
+    
+    nome_do_arquivo = input("Insira o nome do arquivo .har: ")
+    try:
+        logs = ler_arquivo(nome_do_arquivo)
+    except (FileNotFoundError, ValueError) as error:
+        print(f"Erro ao ler o arquivo: {error}")
+        return
+
+    head = montar_head(logs["log"]["pages"], logs["log"]["entries"])
+    entries = logs["log"]["entries"]
+
+    print("Escolha uma opcao: ")
 
     indice_do_menu = 0
     limite = -1

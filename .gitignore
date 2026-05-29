@@ -1,4 +1,4 @@
-net.har
+*.har
 venv/
 relatorios/*
 .DS_Store
