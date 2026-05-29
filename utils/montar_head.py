@@ -8,10 +8,10 @@ def montar_head(paginas_processadas, requisicoes):
     data_logs = datetime.strptime(data_de_leitura, "%Y-%m-%dT%H:%M:%S.%fZ").date().strftime("%d/%m/%Y")
 
     head = f"""
-    Relatorio de Análise de Logs \n
-    Materia: {materia_url} \n
-    Data de leitura dos logs: {data_logs} \n
-    Quantidade de logs: {qnt_logs} \n
+\nRelatorio de Análise de Logs \n
+Materia: {materia_url} \n
+Data de leitura dos logs: {data_logs} \n
+Quantidade de logs: {qnt_logs} \n
     """
 
     return head

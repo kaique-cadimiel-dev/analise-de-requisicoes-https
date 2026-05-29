@@ -1,2 +1,4 @@
 net.har
 venv/
+relatorios/*
+.DS_Store
