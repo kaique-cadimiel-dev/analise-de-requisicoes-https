@@ -11,27 +11,43 @@ def obter_ocorrencias(entries):
     ocorrencias = dict()
     for entrie in entries:
         dominio = re.search(pattern, entrie["request"]["url"])
-        if dominio.group(0) in ocorrencias:
-            ocorrencia = {
-                "dominio": dominio.group(0),
-                "ocorrencia": ocorrencias[dominio.group(0)] + 1
+
+        if not dominio:
+            continue
+
+        dominio_url = dominio.group(0)
+        metodo = entrie["request"]["method"]
+
+        if dominio_url not in ocorrencias:
+            ocorrencias[dominio_url] = {
+                "dominio": dominio_url,
+                "ocorrencia": 0,
+                "metodos": set()
             }
-    
-            ocorrencias[dominio.group(0)] = ocorrencia["ocorrencia"]
-        else:
-            ocorrencia = {
-                "dominio": dominio.group(0),
-                "ocorrencia": 1
-            }
-    
-            ocorrencias[dominio.group(0)] = ocorrencia["ocorrencia"]
+
+        ocorrencias[dominio_url]["ocorrencia"] += 1
+        ocorrencias[dominio_url]["metodos"].add(metodo)
+
     return ocorrencias
 
 def ordenar_ocorrencias(ocorrencias):
-    return sorted(ocorrencias.items(), key=lambda item: item[1], reverse=True)
+    ocorrencias_ordenadas = sorted(
+        ocorrencias.values(),
+        key=lambda item: item["ocorrencia"],
+        reverse=True
+    )
+
+    return [
+        (
+            item["dominio"],
+            item["ocorrencia"],
+            ", ".join(sorted(item["metodos"]))
+        )
+        for item in ocorrencias_ordenadas
+    ]
 
 def listar_ocorrencias_de_dominios(ocorrencias, limite=-1):
-    header = ["Domínio", "Ocorrências"]
+    header = ["Domínio", "Ocorrências", "Métodos HTTP"]
     table = tabulate.tabulate(ocorrencias[:limite], headers=header, tablefmt="grid")
     print(f"\nForam encontradas ocorrencias em {len(ocorrencias)} domínios")
     print(table)
