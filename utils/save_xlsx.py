@@ -1,6 +1,20 @@
 import pandas as pd
+from pathlib import Path
 
 diretorio = "./relatorios"
+
+def obter_caminho_disponivel(diretorio, filename):
+    caminho = Path(diretorio) / filename
+
+    if not caminho.exists():
+        return caminho
+
+    contador = 1
+    while True:
+        novo_caminho = caminho.with_name(f"{caminho.stem}_{contador}{caminho.suffix}")
+        if not novo_caminho.exists():
+            return novo_caminho
+        contador += 1
 
 def save_to_xlsx(
     data,
@@ -9,7 +23,7 @@ def save_to_xlsx(
     diretorio=diretorio,
     columns=["Domínios", "Ocorrências"]
 ):
-    caminho_arquivo = f"{diretorio}/{filename}"
+    caminho_arquivo = obter_caminho_disponivel(diretorio, filename)
     df = pd.DataFrame(data, columns=columns)
 
     if campos_head:
@@ -26,4 +40,4 @@ def save_to_xlsx(
     else:
         df.to_excel(caminho_arquivo, index=False)
 
-    print(f"Relatório salvo com sucesso em {diretorio}/{filename}\n")
+    print(f"Relatório salvo com sucesso em {caminho_arquivo}\n")
