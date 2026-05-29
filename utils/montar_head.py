@@ -1,11 +1,15 @@
 from datetime import datetime
 
+def formatar_data_logs(data_de_leitura):
+    data_iso = data_de_leitura.replace("Z", "+00:00")
+    return datetime.fromisoformat(data_iso).date().strftime("%d/%m/%Y")
+
 def montar_head(paginas_processadas, requisicoes):
     materia_url = paginas_processadas[0]["title"]
     data_de_leitura = paginas_processadas[0]["startedDateTime"]
     qnt_logs = len(requisicoes)
 
-    data_logs = datetime.strptime(data_de_leitura, "%Y-%m-%dT%H:%M:%S.%fZ").date().strftime("%d/%m/%Y")
+    data_logs = formatar_data_logs(data_de_leitura)
 
     head = f"""
 \nRelatorio de Análise de Logs \n
