@@ -14,4 +14,7 @@ Data de leitura dos logs: {data_logs} \n
 Quantidade de logs: {qnt_logs} \n
     """
 
-    return head
+    return {
+        "mensagem": head,
+        "campos": [materia_url, data_logs, qnt_logs]
+    }

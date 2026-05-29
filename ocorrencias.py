@@ -68,22 +68,23 @@ Para comecar escolha uma opcao:
                 indice_menu_limite = terminal_menu_limite.show()
                 if indice_menu_limite == 0:
                     limite = int(input("\nQual o limite de visualização? "))
-                    print(head)
+                    print(head["mensagem"])
                     ocorrencias = obter_ocorrencias(entries)
                     ocorrencias = ordenar_ocorrencias(ocorrencias)
                     listar_ocorrencias_de_dominios(ocorrencias, limite)
                     escolheu = True
                 elif indice_menu_limite == 1:
-                    print(head)
+                    print(head["mensagem"])
                     ocorrencias = obter_ocorrencias(entries)
                     ocorrencias = ordenar_ocorrencias(ocorrencias)
                     listar_ocorrencias_de_dominios(ocorrencias)
                     escolheu = True
         elif indice_do_menu == 2:
-            print(head)
+            print(head["mensagem"])
             ocorrencias = obter_ocorrencias(entries)
             ocorrencias = ordenar_ocorrencias(ocorrencias)
-            save_to_xlsx(ocorrencias[:limite], "ocorrencias.xlsx")
+            dados_para_salvar = ocorrencias if limite == -1 else ocorrencias[:limite]
+            save_to_xlsx(dados_para_salvar, "ocorrencias.xlsx", head["campos"])
         elif indice_do_menu == 3:
             print("Programa encerrado com sucesso!")
 
