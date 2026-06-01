@@ -2,6 +2,7 @@ from utils.leitura_de_arquivo import ler_arquivo
 from utils.montar_head import montar_head
 from utils.save_xlsx import save_to_xlsx
 from simple_term_menu import TerminalMenu
+from destinos_http import obter_mensagem_destino_http
 import re
 import tabulate
 
@@ -17,20 +18,61 @@ def obter_ocorrencias(entries):
 
         dominio_url = dominio.group(0)
         metodo = entrie["request"]["method"]
+        destino = next((atributo["value"] for atributo in entrie["request"]["headers"] if atributo["name"] == "sec-fetch-dest"), "desconecido")
 
         if dominio_url not in ocorrencias:
             ocorrencias[dominio_url] = {
                 "dominio": dominio_url,
                 "ocorrencia": 0,
-                "metodos": set()
+                "metodos": set(),
+                "destino": set(),
+                "ocorrencia_destino": 0,
+                "descricao_destino": set()
             }
 
         ocorrencias[dominio_url]["ocorrencia"] += 1
         ocorrencias[dominio_url]["metodos"].add(metodo)
+        ocorrencias[dominio_url]["destino"].add(destino)
 
     return ocorrencias
 
+def normalizar_metodos(metodos):
+    metodos_normalizados = set()
+    for metodo in metodos:
+        if metodo == None:
+            metodos_normalizados.add("NULL")
+        else:
+            metodos_normalizados.add(metodo)
+    return metodos_normalizados
+
 def ordenar_ocorrencias(ocorrencias):
+    ordem = {
+        "audio": 1,
+        "audioworklet": 2,
+        "desconecido": 3,
+        "document": 4,
+        "embed": 5,
+        "empty": 6,
+        "fencedframe": 7,
+        "font": 8,
+        "frame": 9,
+        "iframe": 10,
+        "image": 11,
+        "json": 12,
+        "manifest": 13,
+        "object": 14,
+        "paintworklet": 15,
+        "report": 16,
+        "script": 17,
+        "serviceworker": 18,
+        "sharedworker": 19,
+        "style": 20,
+        "track": 21,
+        "video": 22,
+        "webidentity": 23,
+        "worker": 24
+    }
+
     ocorrencias_ordenadas = sorted(
         ocorrencias.values(),
         key=lambda item: item["ocorrencia"],
@@ -41,13 +83,15 @@ def ordenar_ocorrencias(ocorrencias):
         (
             item["dominio"],
             item["ocorrencia"],
-            ", ".join(sorted(item["metodos"]))
+            ", \n".join(normalizar_metodos(item["metodos"])),
+            "\n".join(sorted(item["destino"], key=lambda campo: ordem[campo])),
+            "\n".join(obter_mensagem_destino_http(destino) for destino in sorted(item["destino"], key=lambda campo: ordem[campo]))
         )
         for item in ocorrencias_ordenadas
     ]
 
 def listar_ocorrencias_de_dominios(ocorrencias, limite=-1):
-    header = ["Domínio", "Ocorrências", "Métodos HTTP"]
+    header = ["Domínio", "Ocorrências", "Métodos HTTP", "Destino", "Descrição do Destino"]
     table = tabulate.tabulate(ocorrencias[:limite], headers=header, tablefmt="grid")
     print(f"\nForam encontradas ocorrencias em {len(ocorrencias)} domínios")
     print(table)
