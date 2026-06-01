@@ -35,4 +35,9 @@ Como obter o arquivo `.har` via speedvitals:
 - Abra a aba `Waterfall`, role até o fim da lista de requisições e clique em **Download HAR**.
 - Salve o arquivo como `net.har` na raiz do projeto antes de executar o script.
 
+ou
+
+- Execute a análise em `https://www.catchpoint.com/webpagetest`
+- Clique em Export, em seguida clique em **Download HAR**
+
 Para detalhes de API e contribuição, veja os arquivos em `docs/` e `CONTRIBUTING.md`.
