@@ -27,10 +27,19 @@ def save_to_xlsx(
     df = pd.DataFrame(data, columns=columns)
 
     if campos_head:
+        campos_do_relatorio = [
+            ["Matéria", campos_head[0]],
+            ["Data de leitura dos logs", campos_head[1]]
+        ]
+
+        if len(campos_head) >= 4:
+            campos_do_relatorio.append(["Hora de leitura dos logs", campos_head[2]])
+            campos_do_relatorio.append(["Quantidade de logs", campos_head[3]])
+        else:
+            campos_do_relatorio.append(["Quantidade de logs", campos_head[2]])
+
         head_df = pd.DataFrame(
-            [["Matéria", campos_head[0]],
-             ["Data de leitura dos logs", campos_head[1]],
-             ["Quantidade de logs", campos_head[2]]],
+            campos_do_relatorio,
             columns=["Informação", "Valor"]
         )
 
