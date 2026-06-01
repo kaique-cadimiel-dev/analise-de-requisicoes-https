@@ -7,6 +7,7 @@ import re
 import tabulate
 
 pattern = r"https:\/\/([^\/]+)\/"
+separador_de_texto = "; "
 
 def obter_ocorrencias(entries):
     ocorrencias = dict()
@@ -26,13 +27,16 @@ def obter_ocorrencias(entries):
                 "ocorrencia": 0,
                 "metodos": set(),
                 "destino": set(),
-                "ocorrencia_destino": 0,
+                "ocorrencia_destino": dict(),
                 "descricao_destino": set()
             }
 
         ocorrencias[dominio_url]["ocorrencia"] += 1
         ocorrencias[dominio_url]["metodos"].add(metodo)
         ocorrencias[dominio_url]["destino"].add(destino)
+        ocorrencias[dominio_url]["ocorrencia_destino"][destino] = (
+            ocorrencias[dominio_url]["ocorrencia_destino"].get(destino, 0) + 1
+        )
 
     return ocorrencias
 
@@ -44,6 +48,9 @@ def normalizar_metodos(metodos):
         else:
             metodos_normalizados.add(metodo)
     return metodos_normalizados
+
+def obter_destinos_ordenados(destinos, ordem):
+    return sorted(destinos, key=lambda campo: ordem.get(campo, 999))
 
 def ordenar_ocorrencias(ocorrencias):
     ordem = {
@@ -70,7 +77,8 @@ def ordenar_ocorrencias(ocorrencias):
         "track": 21,
         "video": 22,
         "webidentity": 23,
-        "worker": 24
+        "worker": 24,
+        "xslt": 25
     }
 
     ocorrencias_ordenadas = sorted(
@@ -83,15 +91,22 @@ def ordenar_ocorrencias(ocorrencias):
         (
             item["dominio"],
             item["ocorrencia"],
-            ", \n".join(normalizar_metodos(item["metodos"])),
-            "\n".join(sorted(item["destino"], key=lambda campo: ordem[campo])),
-            "\n".join(obter_mensagem_destino_http(destino) for destino in sorted(item["destino"], key=lambda campo: ordem[campo]))
+            separador_de_texto.join(normalizar_metodos(item["metodos"])),
+            separador_de_texto.join(obter_destinos_ordenados(item["destino"], ordem)),
+            separador_de_texto.join(
+                f"{destino}: {item['ocorrencia_destino'][destino]}"
+                for destino in obter_destinos_ordenados(item["destino"], ordem)
+            ),
+            separador_de_texto.join(
+                obter_mensagem_destino_http(destino)
+                for destino in obter_destinos_ordenados(item["destino"], ordem)
+            )
         )
         for item in ocorrencias_ordenadas
     ]
 
 def listar_ocorrencias_de_dominios(ocorrencias, limite=-1):
-    header = ["Domínio", "Ocorrências", "Métodos HTTP", "Destino", "Descrição do Destino"]
+    header = ["Domínio", "Ocorrências", "Métodos HTTP", "Destino", "Ocorrências do Destino", "Descrição do Destino"]
     table = tabulate.tabulate(ocorrencias[:limite], headers=header, tablefmt="grid")
     print(f"\nForam encontradas ocorrencias em {len(ocorrencias)} domínios")
     print(table)

@@ -21,7 +21,7 @@ def save_to_xlsx(
     filename,
     campos_head=None,
     diretorio=diretorio,
-    columns=["Domínios", "Ocorrências", "Métodos HTTP", "Destino", "Descrição do Destino"]
+    columns=["Domínios", "Ocorrências", "Métodos HTTP", "Destino", "Ocorrências do Destino", "Descrição do Destino"]
 ):
     caminho_arquivo = obter_caminho_disponivel(diretorio, filename)
     df = pd.DataFrame(data, columns=columns)
