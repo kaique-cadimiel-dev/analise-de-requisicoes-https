@@ -74,8 +74,10 @@ e adicione na raiz. Para mais instruções leia o README.md
                 terminal_menu_filtro = TerminalMenu(opcoes_de_filtro)
                 indice_do_menu_filtar = terminal_menu_filtro.show()
                 if indice_do_menu_filtar == 0:
-                    metodo = input("Informe o método: ")
-                    requests = [request for request in lista_de_requisicoes if str(request[1]).lower() == metodo.lower()]
+                    opcoes_de_metodos = list(set([request[1] for request in lista_de_requisicoes]))
+                    terminal_menu_metodos = TerminalMenu(opcoes_de_metodos)
+                    indice_do_menu_metodos = terminal_menu_metodos.show()
+                    requests = [request for request in lista_de_requisicoes if str(request[1]).lower() == str(opcoes_de_metodos[indice_do_menu_metodos]).lower()]
                     listar_requisicoes_por_dominio(requests)
                 elif indice_do_menu_filtar == 1:
                     destino = input("Informe o destino: ")
