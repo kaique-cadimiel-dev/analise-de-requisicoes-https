@@ -55,16 +55,18 @@ e adicione na raiz. Para mais instruções leia o README.md
     head = montar_head(logs["log"]["pages"], logs["log"]["entries"])
     entries = logs["log"]["entries"]
 
+    print(head["mensagem"])
+
     print("Escolha uma opcao: ")
 
-    indice_do_menu = 0
+    indice_do_menu = -1
 
-    while indice_do_menu != 3:
+    while indice_do_menu != 2:
         opcoes_principais = ["Listar requisicao por dominio", "Salvar em formato .xlsx", "Sair"]
         terminal_menu = TerminalMenu(opcoes_principais)
-        indice_do_menu = terminal_menu.show() + 1
-        if indice_do_menu == 1:
-            print(head["mensagem"])
+        indice_do_menu = terminal_menu.show()
+        print(opcoes_principais[indice_do_menu])
+        if indice_do_menu == 0:
             palavra_chave = input("\nInforme a palavra chave: ")
             lista_de_requisicoes = registra_requisicoes_por_dominio(entries, palavra_chave)
             listar_requisicoes_por_dominio(lista_de_requisicoes)
@@ -90,9 +92,9 @@ e adicione na raiz. Para mais instruções leia o README.md
                 elif indice_do_menu_filtar == 2:
                     escolheu_sair = True
 
-        elif indice_do_menu == 2:
+        elif indice_do_menu == 1:
             print("Em desenvolvimento")
-        elif indice_do_menu == 3:
+        elif indice_do_menu == 2:
             print("Programa encerrado com sucesso!")
 
 if __name__ == "__main__":

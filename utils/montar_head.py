@@ -19,7 +19,6 @@ def montar_head(paginas_processadas, requisicoes):
     hora_logs = formatar_hora_logs(data_de_leitura)
 
     head = f"""
-\nRelatorio de Análise de Logs \n
 Materia: {materia_url} \n
 Data de leitura dos logs: {data_logs} \n
 Hora de leitura dos logs: {hora_logs} \n

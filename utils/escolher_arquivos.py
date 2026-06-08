@@ -20,5 +20,6 @@ def escolher_arquivos():
 
     print("Para comecar selecione o arquivo: \n")
     indice_menu_arquivo = terminal_menu_arquivo.show()
+    print(f"Arquivo selecionado: {opcoes_de_arquivos[indice_menu_arquivo]}\n")
 
     return opcoes_de_arquivos, indice_menu_arquivo
