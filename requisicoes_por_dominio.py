@@ -69,6 +69,20 @@ Para comecar digite o nome do arquivo .har:
             palavra_chave = input("\nInforme a palavra chave: ")
             lista_de_requisicoes = registra_requisicoes_por_dominio(entries, palavra_chave)
             listar_requisicoes_por_dominio(lista_de_requisicoes)
+            escolheu_sair = False
+            while escolheu_sair == False:
+                opcoes_de_filtro = ["Filtar por metodos", "Filtrar por destino", "Voltar"]
+                terminal_menu_filtro = TerminalMenu(opcoes_de_filtro)
+                indice_do_menu_filtar = terminal_menu_filtro.show()
+                if indice_do_menu_filtar == 0:
+                    print("Em desenvolvimento")
+                elif indice_do_menu_filtar == 1:
+                    destino = input("Informe o destino: ")
+                    requests = [request for request in lista_de_requisicoes if request[2] == destino]
+                    listar_requisicoes_por_dominio(requests)
+                elif indice_do_menu_filtar == 2:
+                    escolheu_sair = True
+
         elif indice_do_menu == 2:
             print("Em desenvolvimento")
         elif indice_do_menu == 3:
