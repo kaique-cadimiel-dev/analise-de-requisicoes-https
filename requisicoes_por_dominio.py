@@ -2,6 +2,7 @@ from utils.leitura_de_arquivo import ler_arquivo
 from utils.montar_head import montar_head
 from utils.save_xlsx import save_to_xlsx
 from simple_term_menu import TerminalMenu
+from utils.escolher_arquivos import escolher_arquivos
 import re
 import tabulate
 
@@ -41,16 +42,14 @@ Analise de requisições http
           
 Obtenha seu arquivo "net.har" em "https://speedvitals.com"
 e adicione na raiz. Para mais instruções leia o README.md
-          
-Para comecar digite o nome do arquivo .har:
 
 """)
-    
-    nome_do_arquivo = input("Insira o nome do arquivo .har: ")
+    arquivos, indice_menu_arquivo = escolher_arquivos()
+
     try:
-        logs = ler_arquivo(nome_do_arquivo)
+        logs = ler_arquivo(arquivos[indice_menu_arquivo])
     except (FileNotFoundError, ValueError) as error:
-        print(f"Erro ao ler o arquivo: {error}")
+        print(f"\nErro ao ler o arquivo: {error}\n")
         return
 
     head = montar_head(logs["log"]["pages"], logs["log"]["entries"])
