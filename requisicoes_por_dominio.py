@@ -61,18 +61,19 @@ e adicione na raiz. Para mais instruções leia o README.md
 
     indice_do_menu = -1
 
-    while indice_do_menu != 2:
-        opcoes_principais = ["Listar requisicao por dominio", "Salvar em formato .xlsx", "Sair"]
+    while indice_do_menu != 1:
+        opcoes_principais = ["Listar requisicao por dominio", "Sair"]
         terminal_menu = TerminalMenu(opcoes_principais)
         indice_do_menu = terminal_menu.show()
         print(opcoes_principais[indice_do_menu])
         if indice_do_menu == 0:
             palavra_chave = input("\nInforme a palavra chave: ")
             lista_de_requisicoes = registra_requisicoes_por_dominio(entries, palavra_chave)
+            requisicoes_com_filtro = []
             listar_requisicoes_por_dominio(lista_de_requisicoes)
             escolheu_sair = False
             while escolheu_sair == False:
-                opcoes_de_filtro = ["Filtar por método HTTP", "Filtrar por destino", "Voltar"]
+                opcoes_de_filtro = ["Filtar por método HTTP", "Filtrar por destino", "Salvar em formato .xlsx", "Voltar"]
                 terminal_menu_filtro = TerminalMenu(opcoes_de_filtro)
                 indice_do_menu_filtar = terminal_menu_filtro.show()
                 if indice_do_menu_filtar == 0:
@@ -80,21 +81,23 @@ e adicione na raiz. Para mais instruções leia o README.md
                     terminal_menu_metodos = TerminalMenu(opcoes_de_metodos)
                     indice_do_menu_metodos = terminal_menu_metodos.show()
                     print(f"Método escolhido: {opcoes_de_metodos[indice_do_menu_metodos]}\n")
-                    requests = [request for request in lista_de_requisicoes if str(request[1]).lower() == str(opcoes_de_metodos[indice_do_menu_metodos]).lower()]
-                    listar_requisicoes_por_dominio(requests)
+                    requisicoes_com_filtro = [request for request in lista_de_requisicoes if str(request[1]).lower() == str(opcoes_de_metodos[indice_do_menu_metodos]).lower()]
+                    listar_requisicoes_por_dominio(requisicoes_com_filtro)
                 elif indice_do_menu_filtar == 1:
                     opcoes_de_destino = list(set([request[2] for request in lista_de_requisicoes]))
                     terminal_menu_destino = TerminalMenu(opcoes_de_destino)
                     indice_do_menu_destino = terminal_menu_destino.show()
                     print(f"Destino escolhido: {opcoes_de_destino[indice_do_menu_destino]}\n")
-                    requests = [request for request in lista_de_requisicoes if str(request[2]).lower() == str(opcoes_de_destino[indice_do_menu_destino]).lower()]
-                    listar_requisicoes_por_dominio(requests)
+                    requisicoes_com_filtro = [request for request in lista_de_requisicoes if str(request[2]).lower() == str(opcoes_de_destino[indice_do_menu_destino]).lower()]
+                    listar_requisicoes_por_dominio(requisicoes_com_filtro)
                 elif indice_do_menu_filtar == 2:
+                    if len(requisicoes_com_filtro) > 0:
+                        save_to_xlsx(requisicoes_com_filtro, "requisicoes_por_dominio.xlsx", columns=["Domínio", "Método HTTP", "Destino", "URL"])
+                    else:
+                        save_to_xlsx(lista_de_requisicoes, "requisicoes_por_dominio.xlsx", columns=["Domínio", "Método HTTP", "Destino", "URL"])
+                elif indice_do_menu_filtar == 3:
                     escolheu_sair = True
-
         elif indice_do_menu == 1:
-            print("Em desenvolvimento")
-        elif indice_do_menu == 2:
             print("Programa encerrado com sucesso!")
 
 if __name__ == "__main__":
