@@ -77,11 +77,15 @@ e adicione na raiz. Para mais instruções leia o README.md
                     opcoes_de_metodos = list(set([request[1] for request in lista_de_requisicoes]))
                     terminal_menu_metodos = TerminalMenu(opcoes_de_metodos)
                     indice_do_menu_metodos = terminal_menu_metodos.show()
+                    print(f"Método escolhido: {opcoes_de_metodos[indice_do_menu_metodos]}\n")
                     requests = [request for request in lista_de_requisicoes if str(request[1]).lower() == str(opcoes_de_metodos[indice_do_menu_metodos]).lower()]
                     listar_requisicoes_por_dominio(requests)
                 elif indice_do_menu_filtar == 1:
-                    destino = input("Informe o destino: ")
-                    requests = [request for request in lista_de_requisicoes if request[2] == destino]
+                    opcoes_de_destino = list(set([request[2] for request in lista_de_requisicoes]))
+                    terminal_menu_destino = TerminalMenu(opcoes_de_destino)
+                    indice_do_menu_destino = terminal_menu_destino.show()
+                    print(f"Destino escolhido: {opcoes_de_destino[indice_do_menu_destino]}\n")
+                    requests = [request for request in lista_de_requisicoes if str(request[2]).lower() == str(opcoes_de_destino[indice_do_menu_destino]).lower()]
                     listar_requisicoes_por_dominio(requests)
                 elif indice_do_menu_filtar == 2:
                     escolheu_sair = True
